@@ -1,1 +1,24 @@
--- SQLite schema placeholder\n
+PRAGMA journal_mode=WAL;
+
+CREATE TABLE IF NOT EXISTS conversations (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    mode TEXT NOT NULL,
+    prompt TEXT NOT NULL,
+    response TEXT NOT NULL,
+    created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS learner_progress (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    learner_id TEXT NOT NULL,
+    lesson_name TEXT NOT NULL,
+    completed INTEGER NOT NULL DEFAULT 0,
+    badges INTEGER NOT NULL DEFAULT 0,
+    updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS app_settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    setting_key TEXT NOT NULL UNIQUE,
+    setting_value TEXT NOT NULL
+);

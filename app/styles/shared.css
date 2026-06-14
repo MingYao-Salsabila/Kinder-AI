@@ -1,1 +1,33 @@
-/* Shared theme placeholder */\n
+:root {
+    --kid-bg: #f7fbff;
+    --teacher-bg: #fffaf2;
+    --admin-bg: #f5f7fb;
+    --card-bg: rgba(255, 255, 255, 0.9);
+    --border: rgba(0, 0, 0, 0.08);
+}
+
+.block-container {
+    padding-top: 2rem;
+    padding-bottom: 3rem;
+}
+
+.stApp {
+    background: linear-gradient(180deg, #fbfdff 0%, #f8f9fc 100%);
+}
+
+section[data-testid="stSidebar"] {
+    background: #ffffff;
+    border-right: 1px solid var(--border);
+}
+
+[data-testid="stMetric"] {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    padding: 0.75rem;
+    border-radius: 18px;
+}
+
+.stButton > button {
+    border-radius: 999px;
+    padding: 0.55rem 1rem;
+}

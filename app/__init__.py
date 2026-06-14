@@ -1,0 +1,1 @@
+"""KinderAi application package."""

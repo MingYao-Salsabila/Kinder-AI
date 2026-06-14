@@ -1,9 +1,11 @@
 streamlit
+python-dotenv
+pandas
+numpy
+pydantic
 anthropic
 openai
 chromadb
 faiss-cpu
-pandas
-numpy
-pydantic
-python-dotenv
+requests
+pytest
