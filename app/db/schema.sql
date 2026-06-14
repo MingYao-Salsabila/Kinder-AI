@@ -1,0 +1,1 @@
+-- SQLite schema placeholder\n

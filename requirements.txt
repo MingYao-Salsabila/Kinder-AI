@@ -1,0 +1,9 @@
+streamlit
+anthropic
+openai
+chromadb
+faiss-cpu
+pandas
+numpy
+pydantic
+python-dotenv

@@ -1,0 +1,1 @@
+# Kid mode placeholder\n
