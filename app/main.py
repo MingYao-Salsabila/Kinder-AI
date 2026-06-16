@@ -41,10 +41,16 @@ def main() -> None:
 
     with st.sidebar:
         st.subheader("Mode")
+        # Consume any pending navigation set by landing-page buttons *before*
+        # the radio widget is instantiated -- Streamlit forbids writing a
+        # widget's key in session state after it has been created.
+        _pending = st.session_state.pop("_nav_mode", None)
+        _default_idx = MODES.index(_pending) if _pending in MODES else MODES.index(settings.default_mode)
+
         selected_mode = st.radio(
             "Select a mode",
             options=MODES,
-            index=MODES.index(settings.default_mode),
+            index=_default_idx,
             horizontal=False,
             key="app_mode",
         )
