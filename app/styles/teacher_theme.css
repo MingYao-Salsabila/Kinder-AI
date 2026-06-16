@@ -1,1 +1,77 @@
-/* Teacher theme placeholder: clean, high-contrast layouts for readability. */
+/*
+  Teacher Mode theme
+  ------------------
+  Palette: warm paper (#FAF7F0), deep teal (#1F6F6F) for actions and links,
+  a muted gold (#C9A227) "marking pen" accent for structure.
+  Typography: a serif display face for headings (lesson-plan feel) paired
+  with a clean sans-serif body.
+  Signature: section headings carry a left-edge margin rule, like notes in
+  the margin of a lesson plan.
+*/
+
+:root {
+    --teacher-bg: #faf7f0;
+    --teacher-ink: #1f2933;
+    --teacher-accent: #1f6f6f;
+    --teacher-gold: #c9a227;
+}
+
+.stApp {
+    background: var(--teacher-bg);
+    color: var(--teacher-ink);
+}
+
+.stApp, .stApp p, .stApp li, .stApp label {
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+}
+
+.stApp h1, .stApp h2, .stApp h3 {
+    font-family: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+    font-weight: 700;
+}
+
+.stApp h1 {
+    color: var(--teacher-accent);
+}
+
+/* Margin-rule signature: section headings look like notes pinned to the
+   edge of a lesson plan page. */
+.stApp h2, .stApp h3 {
+    border-left: 4px solid var(--teacher-gold);
+    padding-left: 0.6rem;
+}
+
+.stButton > button {
+    background: var(--teacher-accent);
+    color: #ffffff;
+    border: 1px solid var(--teacher-accent);
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.stButton > button:hover {
+    background: #18595a;
+    border-color: #18595a;
+    color: #ffffff;
+}
+
+[data-testid="stMetric"] {
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    border-top: 3px solid var(--teacher-gold);
+}
+
+[data-testid="stMetricValue"] {
+    color: var(--teacher-accent);
+}
+
+/* Code / config blocks read like typed teacher notes */
+.stApp pre, .stApp code {
+    background: #f1ece0 !important;
+    border: 1px solid rgba(31, 41, 51, 0.08);
+}
+
+div[data-testid="stExpander"] {
+    border: 1px solid rgba(31, 41, 51, 0.08);
+    border-radius: 10px;
+}

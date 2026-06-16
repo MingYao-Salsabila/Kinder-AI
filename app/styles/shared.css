@@ -1,7 +1,4 @@
 :root {
-    --kid-bg: #f7fbff;
-    --teacher-bg: #fffaf2;
-    --admin-bg: #f5f7fb;
     --card-bg: rgba(255, 255, 255, 0.9);
     --border: rgba(0, 0, 0, 0.08);
 }
@@ -30,4 +27,12 @@ section[data-testid="stSidebar"] {
 .stButton > button {
     border-radius: 999px;
     padding: 0.55rem 1rem;
+}
+
+.stAlert, [data-testid*="stAlert"], [data-testid*="Alert"] {
+    border-radius: 14px;
+}
+
+div[data-testid="stExpander"] {
+    border-radius: 14px;
 }

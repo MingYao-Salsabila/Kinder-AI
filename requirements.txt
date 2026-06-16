@@ -1,11 +1,10 @@
+# Core app
 streamlit
 python-dotenv
 pandas
 numpy
-pydantic
-anthropic
-openai
-chromadb
-faiss-cpu
-requests
-pytest
+
+# Real Gemini provider (optional at runtime -- the app falls back to an
+# offline stub if this isn't installed, GEMINI_USE_STUB=true, or no real
+# GEMINI_API_KEY is set)
+google-genai

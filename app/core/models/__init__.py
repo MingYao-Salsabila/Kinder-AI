@@ -1,26 +1,9 @@
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from datetime import datetime
+from dataclasses import dataclass
 from typing import Literal
 
-Role = Literal["user", "assistant", "system"]
 Mode = Literal["landing", "kid", "teacher", "admin"]
-
-
-@dataclass(slots=True)
-class Message:
-    role: Role
-    content: str
-    created_at: datetime = field(default_factory=datetime.utcnow)
-
-
-@dataclass(slots=True)
-class ConversationRecord:
-    mode: Mode
-    prompt: str
-    response: str
-    created_at: datetime = field(default_factory=datetime.utcnow)
 
 
 @dataclass(slots=True)

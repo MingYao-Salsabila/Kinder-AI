@@ -1,0 +1,12 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+# E402 fires on entry-point files (main.py, scripts/) that must add the
+# project root to sys.path before importing app modules.  Suppress it globally
+# and rely on code review to keep non-entry-point imports at the top.
+ignore = ["E402"]

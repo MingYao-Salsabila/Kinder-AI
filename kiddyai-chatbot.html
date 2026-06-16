@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KinderAI – Learn & Play!</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --purple:#6C63FF;--purple-light:#EEF0FF;--purple-dark:#4A41CC;
+  --coral:#FF6B6B;--teal:#4ECDC4;--yellow:#FFD93D;
+  --mint:#6BCB77;--pink:#FF9ECD;--orange:#FF9A3C;
+  --bg:#EEF6FF;--card:#fff;--text:#2D3748;--muted:#718096;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);min-height:100vh;color:var(--text);overflow:hidden}
+
+/* ─── LAYOUT ─── */
+.app{display:grid;grid-template-columns:220px 1fr;grid-template-rows:68px 1fr;height:100vh}
+
+/* ─── HEADER ─── */
+.header{
+  grid-column:1/-1;background:var(--card);
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 24px;border-bottom:2px solid #E8EFFF;z-index:10
+}
+.logo{display:flex;align-items:center;gap:10px}
+.logo-icon{
+  width:42px;height:42px;background:var(--purple);border-radius:13px;
+  display:flex;align-items:center;justify-content:center;font-size:22px
+}
+.logo-text{font-size:22px;font-weight:900;color:var(--purple)}
+.logo-sub{font-size:11px;font-weight:700;color:var(--muted);margin-top:-3px;margin-left:1px}
+.header-right{display:flex;align-items:center;gap:12px}
+.badge{
+  font-weight:800;font-size:15px;padding:7px 14px;border-radius:50px;
+  display:flex;align-items:center;gap:6px;cursor:default
+}
+.badge-star{background:#FFF8E1;color:#E65100}
+.badge-fire{background:#FFF3F3;color:#C62828}
+.avatar{
+  width:42px;height:42px;background:var(--purple);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:20px;
+  border:3px solid #E8EFFF;cursor:pointer
+}
+
+/* ─── SIDEBAR ─── */
+.sidebar{
+  background:var(--purple);padding:16px 12px;
+  display:flex;flex-direction:column;gap:8px;overflow-y:auto
+}
+.mascot-box{
+  background:rgba(255,255,255,.15);border-radius:18px;
+  padding:14px 12px;text-align:center;margin-bottom:4px
+}
+.mascot-svg{width:88px;height:88px;margin:0 auto;display:block;animation:float 3s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.mascot-name{color:#fff;font-weight:900;font-size:14px;margin-top:8px}
+.mascot-tag{color:rgba(255,255,255,.8);font-size:11px;font-weight:700;margin-top:2px}
+
+.nav-group{color:rgba(255,255,255,.6);font-size:10px;font-weight:800;
+  text-transform:uppercase;letter-spacing:1px;padding:4px 8px 2px}
+.nav-btn{
+  display:flex;align-items:center;gap:9px;padding:11px 13px;border-radius:13px;
+  background:rgba(255,255,255,.1);color:#fff;font-family:'Nunito',sans-serif;
+  font-weight:700;font-size:13px;cursor:pointer;border:none;width:100%;
+  text-align:left;transition:all .2s
+}
+.nav-btn:hover{background:rgba(255,255,255,.22);transform:translateX(3px)}
+.nav-btn.active{background:#fff;color:var(--purple)}
+.nav-icon{font-size:17px;flex-shrink:0}
+
+/* ─── MAIN ─── */
+.main{display:flex;flex-direction:column;padding:14px 16px;gap:12px;overflow:hidden}
+
+/* Topic pills */
+.topics{display:flex;gap:9px;flex-wrap:wrap}
+.topic{
+  display:flex;align-items:center;gap:7px;padding:9px 16px;border-radius:50px;
+  font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;
+  cursor:pointer;border:2.5px solid transparent;transition:all .2s;
+  box-shadow:0 3px 10px rgba(0,0,0,.08)
+}
+.topic:hover{transform:translateY(-3px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.t1{background:var(--coral);color:#fff}
+.t2{background:var(--purple);color:#fff}
+.t3{background:var(--teal);color:#fff}
+.t4{background:var(--yellow);color:#5D4E00}
+.t5{background:var(--mint);color:#fff}
+.t6{background:var(--pink);color:#7B1F54}
+.topic.active{border-color:#2D3748;transform:translateY(-3px)}
+
+/* Progress bar */
+.prog-row{
+  background:var(--card);border-radius:16px;padding:12px 18px;
+  display:flex;align-items:center;gap:14px;box-shadow:0 3px 14px rgba(108,99,255,.07)
+}
+.prog-label{font-weight:800;font-size:12px;color:var(--text);white-space:nowrap}
+.prog-track{flex:1;height:11px;background:#EEF6FF;border-radius:6px;overflow:hidden}
+.prog-fill{
+  height:100%;width:65%;background:linear-gradient(90deg,var(--purple),var(--teal));
+  border-radius:6px;position:relative;overflow:hidden
+}
+.prog-fill::after{
+  content:'';position:absolute;top:0;right:0;bottom:0;width:32px;
+  background:rgba(255,255,255,.35);animation:shimmer 2s ease-in-out infinite
+}
+@keyframes shimmer{0%{transform:translateX(20px);opacity:0}50%{opacity:1}100%{transform:translateX(-80px);opacity:0}}
+.prog-pct{font-weight:900;font-size:13px;color:var(--purple);white-space:nowrap}
+
+/* Chat area */
+.chat{
+  flex:1;background:var(--card);border-radius:22px;padding:18px;
+  overflow-y:auto;display:flex;flex-direction:column;gap:14px;
+  box-shadow:0 3px 18px rgba(108,99,255,.07)
+}
+.chat-date{
+  text-align:center;font-size:11px;font-weight:700;color:var(--muted);
+  display:flex;align-items:center;gap:8px
+}
+.chat-date::before,.chat-date::after{content:'';flex:1;height:1.5px;background:#EEF6FF;border-radius:2px}
+
+/* Messages */
+.msg{display:flex;align-items:flex-end;gap:9px}
+.msg.ai{flex-direction:row}
+.msg.me{flex-direction:row-reverse}
+.mavatar{
+  width:34px;height:34px;border-radius:50%;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;font-size:17px
+}
+.mavatar.ai{background:var(--purple)}
+.mavatar.me{background:var(--pink)}
+.bubble{
+  max-width:62%;padding:11px 15px;border-radius:18px;
+  font-weight:700;font-size:14px;line-height:1.55
+}
+.ai .bubble{background:#F0EEFF;color:var(--text);border-bottom-left-radius:4px}
+.me .bubble{background:var(--purple);color:#fff;border-bottom-right-radius:4px}
+
+/* Animal cards */
+.cards{display:flex;gap:9px;flex-wrap:wrap;margin-top:8px}
+.acard{
+  background:#fff;border:2.5px solid #EEF6FF;border-radius:14px;
+  padding:10px 14px;text-align:center;min-width:74px;cursor:pointer;
+  transition:all .2s;box-shadow:0 2px 8px rgba(0,0,0,.05)
+}
+.acard:hover{transform:scale(1.1);border-color:var(--purple)}
+.aemoji{font-size:30px;display:block;margin-bottom:4px}
+.aname{font-size:11px;font-weight:900;color:var(--purple)}
+
+/* Quick replies */
+.qr{display:flex;gap:7px;flex-wrap:wrap;margin-top:8px}
+.qbtn{
+  padding:7px 14px;border-radius:50px;border:2px solid var(--purple);
+  background:#fff;color:var(--purple);font-family:'Nunito',sans-serif;
+  font-weight:800;font-size:12px;cursor:pointer;transition:all .2s
+}
+.qbtn:hover{background:var(--purple);color:#fff;transform:translateY(-2px)}
+
+/* Typing dots */
+.typing{display:flex;align-items:center;gap:9px}
+.dots{display:flex;gap:4px;padding:11px 15px;background:#F0EEFF;border-radius:18px;border-bottom-left-radius:4px}
+.dot{width:7px;height:7px;background:var(--purple);border-radius:50%;animation:bounce 1.4s ease-in-out infinite}
+.dot:nth-child(2){animation-delay:.2s}
+.dot:nth-child(3){animation-delay:.4s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-6px)}}
+
+/* Reward pop-in */
+.reward-bar{
+  display:flex;align-items:center;gap:10px;background:#FFFBE6;
+  border:2px solid #FFD93D;border-radius:14px;padding:9px 15px
+}
+.reward-bar .stars{font-size:22px}
+.reward-msg{font-weight:800;font-size:13px;color:#7B4F00}
+
+/* Input row */
+.input-row{
+  display:flex;gap:9px;align-items:center;background:var(--card);
+  padding:10px 14px;border-radius:18px;box-shadow:0 3px 14px rgba(108,99,255,.07)
+}
+.inp{
+  flex:1;border:2px solid #EEF6FF;border-radius:12px;padding:10px 14px;
+  font-family:'Nunito',sans-serif;font-size:14px;font-weight:700;
+  color:var(--text);outline:none;background:#F8F9FF
+}
+.inp:focus{border-color:var(--purple)}
+.inp::placeholder{color:#B0B8CC}
+.iBtn{
+  width:44px;height:44px;border-radius:12px;border:none;
+  font-size:19px;cursor:pointer;display:flex;align-items:center;
+  justify-content:center;transition:all .2s;flex-shrink:0
+}
+.mic-btn{background:#EEF6FF;color:var(--purple)}
+.mic-btn:hover{background:var(--purple);color:#fff}
+.send-btn{background:var(--coral);color:#fff;box-shadow:0 3px 10px rgba(255,107,107,.35)}
+.send-btn:hover{transform:scale(1.08);box-shadow:0 5px 16px rgba(255,107,107,.45)}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ── HEADER ── -->
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">🤖</div>
+      <div>
+        <div class="logo-text">KinderAI</div>
+        <div class="logo-sub">Learn · Play · Grow</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="badge badge-star">⭐ 240 Stars</div>
+      <div class="badge badge-fire">🔥 7 Day Streak</div>
+      <div class="avatar">🧒</div>
+    </div>
+  </header>
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="sidebar">
+    <div class="mascot-box">
+      <!-- Robbie the Robot SVG -->
+      <svg class="mascot-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+        <!-- Antenna -->
+        <line x1="50" y1="14" x2="50" y2="5" stroke="rgba(255,255,255,.7)" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="50" cy="4" r="4" fill="#FFD93D"/>
+        <!-- Head -->
+        <rect x="19" y="14" width="62" height="38" rx="13" fill="rgba(255,255,255,.92)"/>
+        <!-- Eyes -->
+        <circle cx="36" cy="30" r="9" fill="#6C63FF"/>
+        <circle cx="64" cy="30" r="9" fill="#6C63FF"/>
+        <circle cx="36" cy="30" r="5" fill="#fff"/>
+        <circle cx="64" cy="30" r="5" fill="#fff"/>
+        <circle cx="38" cy="28" r="2.5" fill="#6C63FF"/>
+        <circle cx="66" cy="28" r="2.5" fill="#6C63FF"/>
+        <circle cx="39.5" cy="26.5" r="1" fill="#fff"/>
+        <circle cx="67.5" cy="26.5" r="1" fill="#fff"/>
+        <!-- Smile -->
+        <path d="M37 44 Q50 52 63 44" stroke="#6C63FF" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Body -->
+        <rect x="24" y="52" width="52" height="36" rx="11" fill="rgba(255,255,255,.92)"/>
+        <!-- Chest screen -->
+        <rect x="33" y="60" width="34" height="20" rx="6" fill="#EEF6FF"/>
+        <rect x="37" y="64" width="8" height="4" rx="2" fill="#4ECDC4"/>
+        <rect x="49" y="64" width="8" height="4" rx="2" fill="#FFD93D"/>
+        <rect x="37" y="71" width="20" height="4" rx="2" fill="#FF6B6B"/>
+        <!-- Arms -->
+        <rect x="8" y="57" width="17" height="9" rx="4.5" fill="rgba(255,255,255,.92)"/>
+        <rect x="75" y="57" width="17" height="9" rx="4.5" fill="rgba(255,255,255,.92)"/>
+        <!-- Legs -->
+        <rect x="32" y="85" width="13" height="11" rx="4" fill="rgba(255,255,255,.92)"/>
+        <rect x="55" y="85" width="13" height="11" rx="4" fill="rgba(255,255,255,.92)"/>
+      </svg>
+      <div class="mascot-name">Robbie 🤖</div>
+      <div class="mascot-tag">Your AI Buddy!</div>
+    </div>
+
+    <div class="nav-group">Learn With Me</div>
+    <button class="nav-btn active"><span class="nav-icon">🐘</span> Animals</button>
+    <button class="nav-btn"><span class="nav-icon">🔤</span> ABC Letters</button>
+    <button class="nav-btn"><span class="nav-icon">🔢</span> Numbers</button>
+    <button class="nav-btn"><span class="nav-icon">🎨</span> Colors</button>
+    <button class="nav-btn"><span class="nav-icon">🔷</span> Shapes</button>
+    <button class="nav-btn"><span class="nav-icon">🌍</span> Our World</button>
+
+    <div class="nav-group" style="margin-top:6px">My Journey</div>
+    <button class="nav-btn"><span class="nav-icon">🏆</span> Rewards</button>
+    <button class="nav-btn"><span class="nav-icon">📊</span> My Report</button>
+  </aside>
+
+  <!-- ── MAIN ── -->
+  <main class="main">
+
+    <!-- Topic pills -->
+    <div class="topics">
+      <button class="topic t1 active">🐘 Animals</button>
+      <button class="topic t2">🔤 ABC</button>
+      <button class="topic t3">🔢 Numbers</button>
+      <button class="topic t4">🎨 Colors</button>
+      <button class="topic t5">🌿 Nature</button>
+      <button class="topic t6">⭐ Quiz Time!</button>
+    </div>
+
+    <!-- Progress row -->
+    <div class="prog-row">
+      <span class="prog-label">🐘 Animals Level</span>
+      <div class="prog-track"><div class="prog-fill"></div></div>
+      <span class="prog-pct">65% 🌟</span>
+    </div>
+
+    <!-- Chat -->
+    <div class="chat">
+      <div class="chat-date">Today's Adventure ✨</div>
+
+      <!-- Robbie greeting -->
+      <div class="msg ai">
+        <div class="mavatar ai">🤖</div>
+        <div>
+          <div class="bubble">
+            Hello! 👋 I'm Robbie! What do you want to learn today? Pick a topic and let's have fun! 🎉
+          </div>
+        </div>
+      </div>
+
+      <!-- Child picks -->
+      <div class="msg me">
+        <div class="mavatar me">🧒</div>
+        <div class="bubble">I want to learn about animals! 🐘🦁</div>
+      </div>
+
+      <!-- Robbie shows animal cards -->
+      <div class="msg ai">
+        <div class="mavatar ai">🤖</div>
+        <div>
+          <div class="bubble">Awesome choice! 🌟 Let's meet some amazing animals! Can you say their names out loud? 😄</div>
+          <div class="cards">
+            <div class="acard"><span class="aemoji">🦁</span><div class="aname">Lion</div></div>
+            <div class="acard"><span class="aemoji">🐘</span><div class="aname">Elephant</div></div>
+            <div class="acard"><span class="aemoji">🦋</span><div class="aname">Butterfly</div></div>
+            <div class="acard"><span class="aemoji">🐬</span><div class="aname">Dolphin</div></div>
+            <div class="acard"><span class="aemoji">🦜</span><div class="aname">Parrot</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Child answers -->
+      <div class="msg me">
+        <div class="mavatar me">🧒</div>
+        <div class="bubble">LION! 🦁 Roarrr!!</div>
+      </div>
+
+      <!-- Reward pop-in -->
+      <div class="reward-bar">
+        <span class="stars">🌟🌟🌟</span>
+        <span class="reward-msg">WOW! You earned 3 stars! Lions are the Kings of the Jungle! 👑</span>
+      </div>
+
+      <!-- Robbie follow-up -->
+      <div class="msg ai">
+        <div class="mavatar ai">🤖</div>
+        <div>
+          <div class="bubble">Great job! 🎊 Lions live in Africa and are very brave! What do you want to do next?</div>
+          <div class="qr">
+            <button class="qbtn">🐘 Tell me about Elephants!</button>
+            <button class="qbtn">🦋 Next animal!</button>
+            <button class="qbtn">⭐ Take a quiz!</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Typing indicator -->
+      <div class="msg ai typing">
+        <div class="mavatar ai">🤖</div>
+        <div class="dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Input row -->
+    <div class="input-row">
+      <button class="iBtn mic-btn" title="Speak">🎤</button>
+      <input class="inp" type="text" placeholder="Type or speak to Robbie... 💬">
+      <button class="iBtn send-btn" title="Send">🚀</button>
+    </div>
+
+  </main>
+</div>
+</body>
+</html>

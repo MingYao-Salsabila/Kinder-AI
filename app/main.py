@@ -10,8 +10,15 @@ if str(ROOT) not in sys.path:
 import streamlit as st
 
 from app.config import load_settings
+from app.core.rag import get_index
 from app.core.router import render_mode
 from app.db.database import initialize_database, seed_demo_content
+
+MODES = ("landing", "kid", "teacher", "admin")
+_MODE_THEME_CSS = {
+    "kid": "kid_theme.css",
+    "teacher": "teacher_theme.css",
+}
 
 
 def load_css(path: Path) -> str:
@@ -32,24 +39,43 @@ def main() -> None:
         initial_sidebar_state="expanded",
     )
 
-    styles = ROOT / "app" / "styles" / "shared.css"
-    st.markdown(f"<style>{load_css(styles)}</style>", unsafe_allow_html=True)
-
-    st.title(settings.app_name)
-    st.caption("A safe, modular learning assistant for kids, teachers, and admins.")
-
     with st.sidebar:
         st.subheader("Mode")
         selected_mode = st.radio(
             "Select a mode",
-            options=("landing", "kid", "teacher", "admin"),
-            index=("landing", "kid", "teacher", "admin").index(settings.default_mode),
+            options=MODES,
+            index=MODES.index(settings.default_mode),
             horizontal=False,
+            key="app_mode",
         )
+
         st.divider()
         st.write(f"Environment: `{settings.app_env}`")
-        st.write(f"Gemini stub: `{str(settings.gemini_use_stub).lower()}`")
-        st.write(f"Model: `{settings.gemini_model}`")
+        if settings.is_live:
+            st.success(f"Gemini: live (`{settings.gemini_model}`)")
+        else:
+            st.info("Gemini: offline stub — no live API calls")
+            if settings.gemini_use_stub:
+                st.caption("Set `GEMINI_USE_STUB=false` and a real `GEMINI_API_KEY` to go live.")
+            else:
+                st.caption("`GEMINI_API_KEY` looks like a placeholder — add a real key to go live.")
+
+        try:
+            index = get_index(settings)
+            doc_count = len(index.documents)
+        except Exception:
+            doc_count = 0
+        st.caption(f"📚 Knowledge base: {doc_count} lesson note(s) indexed")
+
+    styles_dir = ROOT / "app" / "styles"
+    css = load_css(styles_dir / "shared.css")
+    theme_file = _MODE_THEME_CSS.get(selected_mode)
+    if theme_file:
+        css = f"{css}\n{load_css(styles_dir / theme_file)}"
+    st.markdown(f"<style>{css}</style>", unsafe_allow_html=True)
+
+    st.title(settings.app_name)
+    st.caption("A safe, modular learning assistant for kids, teachers, and admins.")
 
     render_mode(selected_mode, settings)
 
