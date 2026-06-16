@@ -73,5 +73,8 @@ def _render_status(settings: AppSettings) -> None:
 
 
 def _go_to(mode: str) -> None:
-    st.session_state["app_mode"] = mode
+    # Write to a staging key rather than the radio's own key -- Streamlit
+    # raises if you write to a widget key after the widget is instantiated.
+    # main.py pops "_nav_mode" before creating the radio on the next run.
+    st.session_state["_nav_mode"] = mode
     st.rerun()
