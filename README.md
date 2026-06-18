@@ -222,7 +222,20 @@ SQLite (`SQLITE_PATH`) stores:
 
 **Knowledge base changes aren't showing up.** If `app/data/vector_index/index.json` exists, it takes priority over a fresh in-memory build. Click "🔄 Rebuild & save index" in Admin Mode, or delete `index.json` to force a rebuild from the current `.md` files.
 
+**`ImportError: Unable to import required dependency numpy` (common on Windows).** This means the `numpy`/`pandas` pair installed in your virtual environment is broken or mismatched (a corrupted wheel, antivirus quarantining a DLL, or a stale install left over from another project reusing the same venv) -- it is an environment issue, not a code bug. KinderAi itself never imports `pandas`/`numpy` directly (`st.dataframe` accepts plain Python lists/dicts); they are only present as transitive dependencies of Streamlit. Fix it with a clean reinstall:
+
+```bash
+pip uninstall -y numpy pandas
+pip install --no-cache-dir --force-reinstall -r requirements.txt
+```
+
+If that doesn't resolve it, delete the virtual environment entirely and recreate it (`python -m venv .venv` again) -- this is the most reliable fix for a corrupted Windows install.
+
 ## Changelog
+
+### 2.0.1
+- Removed the direct `pandas` import from Admin Mode (`st.dataframe` now receives plain Python lists of dicts) and dropped the unpinned `pandas`/`numpy` entries from `requirements.txt`. They're still installed transitively by Streamlit, but Streamlit now owns the version pin instead of a separate, unpinned spec from this project -- this avoids a binary ABI mismatch between independently-resolved pandas/numpy versions (`ImportError: Unable to import required dependency numpy`), a common failure on Windows.
+- Fixed a crash when navigating from the Landing page buttons ("Try Kid Mode", etc.): writing to the sidebar radio's own session-state key after it was instantiated raised `StreamlitAPIException`. Navigation now goes through a separate staging key consumed before the radio widget is created.
 
 ### 2.0.0
 - Real Gemini provider (`google-genai`) behind a small `LLMProvider` interface, with automatic, graceful fallback to an offline stub.

@@ -1,10 +1,16 @@
 # Core app
 streamlit
 python-dotenv
-pandas
-numpy
 
 # Real Gemini provider (optional at runtime -- the app falls back to an
 # offline stub if this isn't installed, GEMINI_USE_STUB=true, or no real
 # GEMINI_API_KEY is set)
 google-genai
+
+# NOTE: pandas/numpy are NOT listed here on purpose. We don't import them
+# directly anywhere in app/ -- st.dataframe() accepts plain lists of dicts.
+# Streamlit pulls in its own tested-compatible pandas/numpy pair as a
+# transitive dependency. Pinning them ourselves with no version constraint
+# risks resolving a pandas/numpy pair whose binary ABI doesn't match
+# (a common cause of "Unable to import required dependency numpy" on
+# Windows) -- letting Streamlit own that pin avoids the mismatch.

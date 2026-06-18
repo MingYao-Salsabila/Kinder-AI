@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import pandas as pd
 import streamlit as st
 
 from app.config import AppSettings
@@ -133,7 +132,7 @@ def _render_conversations(settings: AppSettings) -> None:
             }
             for row in rows
         ]
-        st.dataframe(pd.DataFrame(display_rows), width="stretch", hide_index=True)
+        st.dataframe(display_rows, width="stretch", hide_index=True)
     else:
         st.info("No conversation logs yet.")
 
@@ -171,7 +170,7 @@ def _render_learner_progress(settings: AppSettings) -> None:
                 "last_activity": row["last_activity"],
             }
         )
-    st.dataframe(pd.DataFrame(display_rows), width="stretch", hide_index=True)
+    st.dataframe(display_rows, width="stretch", hide_index=True)
 
 
 def _render_quiz_attempts(settings: AppSettings) -> None:
@@ -194,7 +193,7 @@ def _render_quiz_attempts(settings: AppSettings) -> None:
                 "created_at": row["created_at"],
             }
         )
-    st.dataframe(pd.DataFrame(display_rows), width="stretch", hide_index=True)
+    st.dataframe(display_rows, width="stretch", hide_index=True)
 
 
 def _render_app_settings(settings: AppSettings) -> None:
@@ -205,8 +204,5 @@ def _render_app_settings(settings: AppSettings) -> None:
         st.info("No app settings stored yet.")
         return
 
-    st.dataframe(
-        pd.DataFrame(sorted(rows.items()), columns=["setting", "value"]),
-        width="stretch",
-        hide_index=True,
-    )
+    display_rows = [{"setting": key, "value": value} for key, value in sorted(rows.items())]
+    st.dataframe(display_rows, width="stretch", hide_index=True)
