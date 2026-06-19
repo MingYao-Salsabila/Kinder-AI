@@ -1,0 +1,17 @@
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+.git/
+.github/
+
+*.sqlite3
+app/db/kinderai.sqlite3
+app/data/vector_index/index.json
+
+.env
+.streamlit/secrets.toml
+
+tests/
